@@ -13,7 +13,8 @@ namespace WinFormsMVVM
         {
             for (var i = 0; i < 15; i++)
             {
-                UIContext.Invoke(  ); cmbTest.Items.Add($"Item {i}");
+                //UIContext.Invoke();
+                //cmbTest.Items.Add($"Item {i}");
                 Work.LongRunning();
             }
 

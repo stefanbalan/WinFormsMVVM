@@ -2,11 +2,10 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
-using WinFormsMVVM.Annotations;
 
 namespace WinFormsMVVM
 {
-    public partial class Form1 : Form
+    public partial class Form1 : ViewBase
     {
         private WindowsFormsSynchronizationContext _uiContext = new WindowsFormsSynchronizationContext();
         public Form1()
@@ -28,24 +27,6 @@ namespace WinFormsMVVM
         private void BtnNonBlocking_Click(object sender, EventArgs e)
         {
            
-        }
-    }
-
-
-    public class WorkerViewModel  : INotifyPropertyChanged
-    {
-        public WorkerViewModel()
-        {
-            
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
