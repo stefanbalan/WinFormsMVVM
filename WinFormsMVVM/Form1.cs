@@ -5,13 +5,17 @@ using System.Windows.Forms;
 
 namespace WinFormsMVVM
 {
-    public partial class Form1 : ViewBase
+    public partial class Form1 : ViewBase<Form1ViewModel>
     {
         private WindowsFormsSynchronizationContext _uiContext = new WindowsFormsSynchronizationContext();
         public Form1()
         {
             InitializeComponent();
             UIContext.Init();
+            var x = "";
+            ViewModel = new Form1ViewModel();
+            Bind(v => v.FinishedGettingItems, () => chkFinished.Checked );
+            Bind(v => v.Finished, () => chkFinished.Checked );
         }
 
 
@@ -26,7 +30,7 @@ namespace WinFormsMVVM
 
         private void BtnNonBlocking_Click(object sender, EventArgs e)
         {
-           
+
         }
     }
 

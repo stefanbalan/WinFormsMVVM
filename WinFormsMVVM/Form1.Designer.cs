@@ -32,6 +32,7 @@
             this.btnNonBlocking = new System.Windows.Forms.Button();
             this.cmbTest = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkFinished = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,6 +66,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkFinished);
             this.groupBox1.Controls.Add(this.cmbTest);
             this.groupBox1.Location = new System.Drawing.Point(243, 12);
             this.groupBox1.Name = "groupBox1";
@@ -72,6 +74,16 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Test area";
+            // 
+            // chkFinished
+            // 
+            this.chkFinished.AutoSize = true;
+            this.chkFinished.Location = new System.Drawing.Point(21, 68);
+            this.chkFinished.Name = "chkFinished";
+            this.chkFinished.Size = new System.Drawing.Size(80, 17);
+            this.chkFinished.TabIndex = 3;
+            this.chkFinished.Text = "checkBox1";
+            this.chkFinished.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -84,6 +96,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -94,6 +107,7 @@
         private System.Windows.Forms.Button btnNonBlocking;
         private System.Windows.Forms.ComboBox cmbTest;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox chkFinished;
     }
 }
 
