@@ -14,8 +14,8 @@ namespace WinFormsMVVM
             UIContext.Init();
             var x = "";
             ViewModel = new Form1ViewModel();
-            Bind(v => v.FinishedGettingItems, () => chkFinished.Checked );
-            Bind(v => v.Finished, () => chkFinished.Checked );
+            //Bind(v => v.FinishedGettingItems, () => chkFinished.Checked );
+            Bind(vm => vm.Finished, v => ((Form1)v).chkFinished.Checked);
         }
 
 

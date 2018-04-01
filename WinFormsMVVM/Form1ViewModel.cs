@@ -55,7 +55,7 @@ namespace WinFormsMVVM
         internal ViewModelBase ViewModel;
         internal Dictionary<string, PropertyChangedHandler> PropertyBindings = new Dictionary<string, PropertyChangedHandler>();
 
-        protected void Bind<T>(Expression<Func<TViewModel, T>> expression, Expression<Func<T>> viewProperty)
+        protected void Bind<T>(Expression<Func<TViewModel, T>> expression, Expression<Func<ViewBase<TViewModel >,T>> viewProperty)
         {
             if (!(expression.Body is MemberExpression member))
                 throw new ArgumentException($"Expression '{expression.Name}' refers to a method, not a property.");
@@ -78,10 +78,11 @@ namespace WinFormsMVVM
                 throw new ArgumentException($"Expression '{viewProperty.Name}' refers to a field, not a property.");
 
             var sm = vpropInfo.SetMethod;
-            sm.Invoke(null, (object[]) propInfo.GetValue(null));
+            //sm.Invoke(this, (object[]) propInfo.GetValue(null));
+            sm.Invoke(this, new object[] { true });
 
             PropertyBindings.Add(propInfo.Name, null);
-            
+
         }
 
         public ViewBase()
