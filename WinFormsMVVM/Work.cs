@@ -9,7 +9,7 @@ namespace WinFormsMVVM
             Thread.Sleep(10000);
         }
 
-        public static async void JobGetItems()
+        public static void JobGetItems()
         {
             for (var i = 0; i < 15; i++)
             {
