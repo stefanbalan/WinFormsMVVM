@@ -45,7 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MVVM\CommandManager.cs">
+    <Compile Include="MVVM\PropertyBinder.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MVVM\CommandBindingManager.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MVVM\Command.cs" />
@@ -61,9 +64,6 @@
     <Compile Include="MVVM\PropertyChangedHandler.cs" />
     <Compile Include="UiContext.cs" />
     <Compile Include="Form1ViewModel.cs" />
-    <Compile Include="ViewBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="Work.cs" />
     <EmbeddedResource Include="Form1.resx">

@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace WinFormsMVVM
 {
-    public class CommandManager : Component
+    public class CommandBindingManager : Component
     {
-        private IList<ICommand> Commands { get; set; }
-        private IList<ICommandBinder> Binders { get; set; }
+        private IList<ICommand> Commands { get; }
+        private IList<ICommandBinder> Binders { get; }
 
-        public CommandManager()
+        public CommandBindingManager()
         {
             Commands = new List<ICommand>();
 
@@ -29,13 +27,14 @@ namespace WinFormsMVVM
 
         private void UpdateCommandState(object sender, EventArgs e)
         {
+            // ReSharper disable once UnusedVariable
             foreach (var command in Commands)
             {
                 //command.Enabled();
             }
         }
 
-        public CommandManager Bind(ICommand command, IComponent component)
+        public CommandBindingManager Bind(ICommand command, IComponent component)
         {
             if (!Commands.Contains(command))
                 Commands.Add(command);
@@ -49,7 +48,7 @@ namespace WinFormsMVVM
             var binder = GetBinderFor(component);
 
             if (binder == null)
-                throw new Exception(string.Format("No binding found for component of type {0}", component.GetType().Name));
+                throw new Exception($"No binding found for component of type {component.GetType().Name}");
 
             return binder;
         }

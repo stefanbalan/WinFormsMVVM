@@ -5,6 +5,10 @@ namespace WinFormsMVVM
 {
     public class Command : ICommand
     {
+
+        public string Name { get; set; }
+        public bool Enabled { get; set; }
+
         private readonly Action _action;
 
         public Command(Action action)
@@ -14,7 +18,7 @@ namespace WinFormsMVVM
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return Enabled;
         }
 
         public void Execute(object parameter)

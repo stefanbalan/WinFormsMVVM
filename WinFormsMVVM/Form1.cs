@@ -1,27 +1,29 @@
 ﻿using System;
+using System.Windows.Forms;
+using WinFormsMVVM.MVVM;
 
 namespace WinFormsMVVM
 {
-    public partial class Form1 : ViewBase<Form1ViewModel>
+    public partial class Form1 : Form //: ViewBase<Form1ViewModel>
     {
-        private CommandManager commanManager;
-
         public Form1()
         {
 
             UIContext.Init();
 
+            InitializeComponent();
+
             //ViewModel = new Form1ViewModel();
             //Bind(v => v.FinishedGettingItems, () => chkFinished.Checked);
-            //Bind(vm => vm.Finished, v => ((Form1)v).chkFinished.Checked);
-            Bind(vm => vm.FinishedGettingItems, v => { chkFinished.Checked = v; });
+            // Bind(vm => vm.Finished, v => ((Form1)v).chkFinished.Checked);
+            propertyBindingManager = new PropertyBinder<Form1ViewModel>();
+            propertyBindingManager.Bind(vm => vm.FinishedGettingItems, v => { chkFinished.Checked = v; });
 
-            InitializeComponent();
 
             //CommandBindings.Add("1", new ControlBinder());
 
-            commanManager = new CommandManager();
-            commanManager.Bind(ViewModel.Toggle, btnNonBlocking);
+            //_commanBindingManager = new CommandBindingManager();
+            commanBindingManager.Bind(propertyBindingManager.ViewModel.Toggle, btnNonBlocking);
         }
 
         private void BtnBlocking_Click(object sender, EventArgs e)
@@ -31,11 +33,6 @@ namespace WinFormsMVVM
                 cmbTest.Items.Add($"Item {i}");
                 Work.LongRunning();
             }
-        }
-
-        private void BtnNonBlocking_Click(object sender, EventArgs e)
-        {
-            //ViewModel.Toggle.Execute();
         }
     }
 

@@ -1,4 +1,6 @@
-﻿namespace WinFormsMVVM
+﻿using WinFormsMVVM.MVVM;
+
+namespace WinFormsMVVM
 {
     partial class Form1
     {
@@ -33,6 +35,7 @@
             this.cmbTest = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.chkFinished = new System.Windows.Forms.CheckBox();
+            this.commanBindingManager = new WinFormsMVVM.CommandBindingManager();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,7 +57,6 @@
             this.btnNonBlocking.TabIndex = 1;
             this.btnNonBlocking.Text = "Non blocking";
             this.btnNonBlocking.UseVisualStyleBackColor = true;
-            this.btnNonBlocking.Click += new System.EventHandler(this.BtnNonBlocking_Click);
             // 
             // cmbTest
             // 
@@ -108,6 +110,8 @@
         private System.Windows.Forms.ComboBox cmbTest;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox chkFinished;
+        private CommandBindingManager commanBindingManager;
+        private PropertyBinder<Form1ViewModel> propertyBindingManager;
     }
 }
 

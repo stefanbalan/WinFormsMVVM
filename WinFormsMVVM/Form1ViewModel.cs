@@ -20,7 +20,7 @@ namespace WinFormsMVVM
 
         public Form1ViewModel()
         {
-            Toggle = new Command(ToggleCommand);
+            Toggle = new Command(ToggleCommand) { Enabled = true, Name = "Toggle" };
         }
 
         public void ToggleCommand()
