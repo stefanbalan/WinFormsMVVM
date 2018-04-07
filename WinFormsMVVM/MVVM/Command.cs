@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Input;
 
 namespace WinFormsMVVM
@@ -23,7 +24,9 @@ namespace WinFormsMVVM
 
         public void Execute(object parameter)
         {
-            _action();
+            Enabled = false;
+            var t = new Thread(() => _action());
+            t.Start();
         }
 
         public event EventHandler CanExecuteChanged;

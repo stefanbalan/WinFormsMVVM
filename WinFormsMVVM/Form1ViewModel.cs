@@ -1,48 +1,48 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace WinFormsMVVM
 {
     public class Form1ViewModel : ViewModelBase
     {
-        public IList<string> Items { get; set; }
+        public ObservableCollection<string> Items { get; set; } = new ObservableCollection<string>();
 
+        private bool _finishedGettingItems;
         public bool FinishedGettingItems
         {
             get { return _finishedGettingItems; }
             set { _finishedGettingItems = value; RaisePropertyChanged(); }
         }
 
-        public bool Finished;
         public ICommand Toggle;
-        private bool _finishedGettingItems;
+        public ICommand GetItems;
+
 
         public Form1ViewModel()
         {
+            Items = new ObservableCollection<string>() { "item1", "item2" };
             Toggle = new Command(ToggleCommand) { Enabled = true, Name = "Toggle" };
+            GetItems = new Command(GetItemsCommand) { Enabled = true, Name = "Get items" };
+
+            Items.CollectionChanged += (sender, args) => RaisePropertyChanged("Items");
         }
 
-        public void ToggleCommand()
+        private void ToggleCommand()
         {
             FinishedGettingItems = !FinishedGettingItems;
         }
 
-        public static void LongRunning()
+        private void GetItemsCommand()
         {
-            Thread.Sleep(10000);
-        }
-
-        public static void JobGetItems()
-        {
+            Items.Clear();
             for (var i = 0; i < 15; i++)
             {
                 //UIContext.Invoke();
-                //cmbTest.Items.Add($"Item {i}");
+                Items.Add($"Item {i}");
                 Work.LongRunning();
             }
 
-
+            FinishedGettingItems = true;
         }
 
     }

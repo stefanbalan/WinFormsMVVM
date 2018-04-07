@@ -19,8 +19,6 @@ namespace WinFormsMVVM.MVVM
 
         public PropertyBinder()
         {
-            ViewModel = new TViewModel();
-
             ViewModel.PropertyChanged += ViewModelOnPropertyChanged;
         }
 

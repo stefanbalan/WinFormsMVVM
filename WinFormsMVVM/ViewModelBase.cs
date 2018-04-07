@@ -1,9 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace WinFormsMVVM
 {
-    public class ViewModelBase : INotifyPropertyChanged, INotifyPropertyChanging
+    public class ViewModelBase : INotifyPropertyChanged, INotifyPropertyChanging, INotifyCollectionChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -16,6 +17,10 @@ namespace WinFormsMVVM
         {
             PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
         }
+
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+
     }
 
     //public class CommandBinder : ICommandExecutor
