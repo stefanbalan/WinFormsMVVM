@@ -8,9 +8,15 @@ namespace WinFormsMVVM
     {
 
         public string Name { get; set; }
-        public bool Enabled { get; set; }
+
+        public bool Enabled
+        {
+            get { return _enabled; }
+            set { _enabled = value; CanExecuteChanged?.Invoke(this, EventArgs.Empty); }
+        }
 
         private readonly Action _action;
+        private bool _enabled;
 
         public Command(Action action)
         {
@@ -25,7 +31,11 @@ namespace WinFormsMVVM
         public void Execute(object parameter)
         {
             Enabled = false;
-            var t = new Thread(() => _action());
+            var t = new Thread(() =>
+            {
+                _action();
+                Enabled = true;
+            });
             t.Start();
         }
 

@@ -23,20 +23,6 @@ namespace WinFormsMVVM
                 cmbTest.DataSource = null; cmbTest.Items.Clear(); cmbTest.DataSource = v;
             });
 
-            //var cmbTestDataSource = new BindingSource { DataSource =  propertyBindingManager.ViewModel.Items};
-            //cmbTest.DataSource = cmbTestDataSource;
-            //propertyBindingManager.ViewModel.Items.CollectionChanged +=
-            //    (sender, args) => UIContext.Invoke(() =>
-            //    {
-            //        cmbTestDataSource.
-            //        cmbTest.DataSource = null;
-            //        cmbTest.Items.Clear();
-            //        cmbTest.DataSource = propertyBindingManager.ViewModel.Items;
-            //    });
-
-
-            //CommandBindings.Add("1", new ControlBinder());
-
             //_commanBindingManager = new CommandBindingManager();
             commanBindingManager.Bind(propertyBindingManager.ViewModel.GetItems, btnNonBlocking);
         }

@@ -7,12 +7,12 @@ using System.Windows.Input;
 
 namespace WinFormsMVVM
 {
-    public class CommandBindingManager : Component
+    public class BindingManager : Component
     {
         private IList<ICommand> Commands { get; }
         private IList<ICommandBinder> Binders { get; }
 
-        public CommandBindingManager()
+        public BindingManager()
         {
             Commands = new List<ICommand>();
 
@@ -34,7 +34,7 @@ namespace WinFormsMVVM
             }
         }
 
-        public CommandBindingManager Bind(ICommand command, IComponent component)
+        public BindingManager Bind(ICommand command, IComponent component)
         {
             if (!Commands.Contains(command))
                 Commands.Add(command);
@@ -45,27 +45,21 @@ namespace WinFormsMVVM
 
         protected ICommandBinder FindBinder(IComponent component)
         {
-            var binder = GetBinderFor(component);
-
-            if (binder == null)
-                throw new Exception($"No binding found for component of type {component.GetType().Name}");
-
-            return binder;
-        }
-
-        private ICommandBinder GetBinderFor(IComponent component)
-        {
+            ICommandBinder binder = null;
             var type = component.GetType();
             while (type != null)
             {
-                var binder = Binders.FirstOrDefault(x => x.SourceType == type);
+                binder = Binders.FirstOrDefault(x => x.SourceType == type);
                 if (binder != null)
                     return binder;
 
                 type = type.BaseType;
             }
 
-            return null;
+            if (binder == null)
+                throw new Exception($"No binding found for component of type {component.GetType().Name}");
+
+            return binder;
         }
 
         protected override void Dispose(bool disposing)
@@ -77,6 +71,6 @@ namespace WinFormsMVVM
         }
     }
 
- 
+
 
 }

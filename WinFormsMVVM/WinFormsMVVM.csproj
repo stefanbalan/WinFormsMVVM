@@ -48,7 +48,7 @@
     <Compile Include="MVVM\PropertyBinder.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MVVM\CommandBindingManager.cs">
+    <Compile Include="MVVM\BindingManager.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MVVM\Command.cs" />

@@ -20,7 +20,6 @@ namespace WinFormsMVVM
 
         public Form1ViewModel()
         {
-            Items = new ObservableCollection<string>() { "item1", "item2" };
             Toggle = new Command(ToggleCommand) { Enabled = true, Name = "Toggle" };
             GetItems = new Command(GetItemsCommand) { Enabled = true, Name = "Get items" };
 
@@ -35,7 +34,7 @@ namespace WinFormsMVVM
         private void GetItemsCommand()
         {
             Items.Clear();
-            for (var i = 0; i < 15; i++)
+            for (var i = 0; i < 10; i++)
             {
                 //UIContext.Invoke();
                 Items.Add($"Item {i}");

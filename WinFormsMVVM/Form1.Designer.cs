@@ -35,7 +35,7 @@ namespace WinFormsMVVM
             this.cmbTest = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.chkFinished = new System.Windows.Forms.CheckBox();
-            this.commanBindingManager = new WinFormsMVVM.CommandBindingManager();
+            this.commanBindingManager = new WinFormsMVVM.BindingManager();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -110,7 +110,7 @@ namespace WinFormsMVVM
         private System.Windows.Forms.ComboBox cmbTest;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox chkFinished;
-        private CommandBindingManager commanBindingManager;
+        private BindingManager commanBindingManager;
         private PropertyBinder<Form1ViewModel> propertyBindingManager;
     }
 }
