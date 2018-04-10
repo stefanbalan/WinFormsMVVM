@@ -31,7 +31,6 @@ namespace WinFormsMVVM
             source.DataBindings.Add("Enabled", command, "Enabled");
             source.DataBindings.Add("Text", command, "Name");
             source.Click += (o, e) => command.Execute(o);
-            command.CanExecuteChanged += (sender, args) => source.ResetBindings();
         }
     }
 
