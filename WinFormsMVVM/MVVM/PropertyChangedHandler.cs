@@ -3,10 +3,12 @@ using System.Threading;
 
 namespace WinFormsMVVM
 {
-    public class PropertyChangedHandler<TViewModel> where TViewModel : ViewModelBase
+    public class PropertyChangedHandler<TViewModel>
+        where TViewModel : ViewModelBase
     {
-        private readonly SynchronizationContext SyncContext;
-        private readonly Action<TViewModel> HandlerAction;
+        protected readonly SynchronizationContext SyncContext;
+        protected readonly Action<TViewModel> HandlerAction;
+
         public PropertyChangedHandler(SynchronizationContext context, Action<TViewModel> action)
         {
             SyncContext = context;

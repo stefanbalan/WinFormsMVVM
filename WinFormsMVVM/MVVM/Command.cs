@@ -1,11 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading;
-using System.Windows.Input;
 
 namespace WinFormsMVVM
 {
-    public class Command : ICommand, INotifyPropertyChanged
+    public class Command : INotifyPropertyChanged
     {
         private readonly Action _action;
 
@@ -27,7 +26,6 @@ namespace WinFormsMVVM
             set
             {
                 _enabled = value;
-                CanExecuteChanged?.Invoke(this, EventArgs.Empty);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Enabled"));
             }
         }
@@ -37,12 +35,7 @@ namespace WinFormsMVVM
             _action = action;
         }
 
-        public bool CanExecute(object parameter)
-        {
-            return Enabled;
-        }
-
-        public void Execute(object parameter)
+        public void Execute(object sender, object parameter)
         {
             var ctx = SynchronizationContext.Current;
             Enabled = false;
@@ -54,7 +47,6 @@ namespace WinFormsMVVM
             t.Start();
         }
 
-        public event EventHandler CanExecuteChanged;
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

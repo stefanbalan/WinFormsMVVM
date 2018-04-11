@@ -45,12 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MVVM\PropertyBinder.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="MVVM\BindingManager.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="MVVM\BindingManager.cs" />
     <Compile Include="MVVM\Command.cs" />
     <Compile Include="MVVM\CommandBinder.cs" />
     <Compile Include="Form1.cs">

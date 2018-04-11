@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Forms;
-using WinFormsMVVM.MVVM;
+
 
 namespace WinFormsMVVM
 {
-    public partial class Form1 : Form //: ViewBase<Form1ViewModel>
+    public partial class Form1 : Form
     {
+        private readonly BindingManager<Form1ViewModel> bindingManager = new BindingManager<Form1ViewModel>();
+
         public Form1()
         {
 
@@ -13,18 +16,17 @@ namespace WinFormsMVVM
 
             InitializeComponent();
 
-            //ViewModel = new Form1ViewModel();
-            //Bind(v => v.FinishedGettingItems, () => chkFinished.Checked);
-            // Bind(vm => vm.Finished, v => ((Form1)v).chkFinished.Checked);
-            propertyBindingManager = new PropertyBinder<Form1ViewModel>();
-            propertyBindingManager.Bind(vm => vm.FinishedGettingItems, v => { chkFinished.Checked = v; });
-            propertyBindingManager.Bind(vm => vm.Items, v =>
-            {
-                cmbTest.DataSource = null; cmbTest.Items.Clear(); cmbTest.DataSource = v;
-            });
+            bindingManager
+                .Bind(vm => vm.GetItems, btnNonBlocking)
+                .Bind(vm => vm.FinishedGettingItems, v => { chkFinished.Checked = v; })
+                .Bind<Collection<string>>(vm => vm.Items, v =>
+                {
+                    cmbTest.DataSource = null;
+                    cmbTest.Items.Clear();
+                    cmbTest.DataSource = v;
+                });
 
-            //_commanBindingManager = new CommandBindingManager();
-            commanBindingManager.Bind(propertyBindingManager.ViewModel.GetItems, btnNonBlocking);
+            bindingManager.Bind(bindingManager.ViewModel.GetItems, btnNonBlocking);
         }
 
         private void BtnBlocking_Click(object sender, EventArgs e)

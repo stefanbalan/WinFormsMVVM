@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 namespace WinFormsMVVM
 {
@@ -14,9 +13,8 @@ namespace WinFormsMVVM
             set { _finishedGettingItems = value; RaisePropertyChanged(); }
         }
 
-        public ICommand Toggle;
-        public ICommand GetItems;
-
+        public Command Toggle;
+        public Command GetItems;
 
         public Form1ViewModel()
         {
@@ -36,9 +34,8 @@ namespace WinFormsMVVM
             Items.Clear();
             for (var i = 0; i < 10; i++)
             {
-                //UIContext.Invoke();
                 Items.Add($"Item {i}");
-                Work.LongRunning();
+                Work.LongRunning(); //simulate real life delay (database, service, etc...)
             }
 
             FinishedGettingItems = true;
