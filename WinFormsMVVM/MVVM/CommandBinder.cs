@@ -27,6 +27,8 @@ namespace WinFormsMVVM
     {
         protected override void Bind(Command command, Control source)
         {
+            if (source.DataBindings["Enabled"] != null || source.DataBindings["Text"] != null) return;
+
             source.DataBindings.Add("Enabled", command, "Enabled");
             source.DataBindings.Add("Text", command, "Name");
             source.Click += command.Execute;

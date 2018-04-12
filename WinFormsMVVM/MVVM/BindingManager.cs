@@ -12,20 +12,18 @@ namespace WinFormsMVVM
 
     public class BindingManager<TViewModel> where TViewModel : ViewModelBase, new()
     {
-        private IList<Command> Commands { get; }
         private IList<ICommandBinder> Binders { get; }
+        private IList<Command> Commands { get; } = new List<Command>();
 
-        private Type ViewModelType { get; }
+        private Dictionary<string, PropertyChangedHandler<TViewModel>> PropertyBindings { get; }
+            = new Dictionary<string, PropertyChangedHandler<TViewModel>>();
+
         internal TViewModel ViewModel { get; set; }
-        internal Dictionary<string, PropertyChangedHandler<TViewModel>> PropertyBindings;
-
 
         public BindingManager()
         {
-            ViewModelType = typeof(TViewModel);
             ViewModel = new TViewModel();
-
-            Commands = new List<Command>();
+            ViewModel.PropertyChanged += ViewModelOnPropertyChanged;
 
             Binders = new List<ICommandBinder>
                           {
@@ -34,8 +32,6 @@ namespace WinFormsMVVM
                           };
 
             Application.Idle += UpdateCommandState;
-
-            ViewModel.PropertyChanged += ViewModelOnPropertyChanged;
         }
 
         private void UpdateCommandState(object sender, EventArgs e)
@@ -100,13 +96,12 @@ namespace WinFormsMVVM
 
             var sourceGetter = commandExpr.Compile();
 
-            //PropertyBindings.Add(propInfo.Name, new PropertyChangedHandler<TViewModel>(SynchronizationContext.Current, (vm) =>
-            //{
-            //    var val = sourceGetter.Invoke(vm);
-            //    setterDelegate.Invoke(val);
-            //}));
-
-
+            var command = sourceGetter.Invoke(ViewModel);
+            if (command != null)
+            {
+                // Commands.Add(); // todo keep command bindings so i can unbind
+                Bind(command, destComp);
+            }
 
             return this;
         }
@@ -138,7 +133,7 @@ namespace WinFormsMVVM
 
             return this;
         }
-        
+
         #endregion
 
 

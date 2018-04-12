@@ -25,8 +25,6 @@ namespace WinFormsMVVM
                     cmbTest.Items.Clear();
                     cmbTest.DataSource = v;
                 });
-
-            bindingManager.Bind(bindingManager.ViewModel.GetItems, btnNonBlocking);
         }
 
         private void BtnBlocking_Click(object sender, EventArgs e)
