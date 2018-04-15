@@ -11,9 +11,6 @@ namespace WinFormsMVVM
 
         public Form1()
         {
-
-            UIContext.Init();
-
             InitializeComponent();
 
             bindingManager
