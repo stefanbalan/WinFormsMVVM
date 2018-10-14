@@ -2,16 +2,22 @@
 using System.ComponentModel;
 using System.Threading;
 
-namespace WinFormsMVVM
+namespace WinFormsMVVM.MVVM
 {
     public class Command : INotifyPropertyChanged
     {
         private readonly Action _action;
-
+        private bool _enabled;
         private string _name;
+
+        public Command(Action action)
+        {
+            _action = action;
+        }
+
         public string Name
         {
-            get { return _name; }
+            get => _name;
             set
             {
                 _name = value;
@@ -19,10 +25,9 @@ namespace WinFormsMVVM
             }
         }
 
-        private bool _enabled;
         public bool Enabled
         {
-            get { return _enabled; }
+            get => _enabled;
             set
             {
                 _enabled = value;
@@ -30,10 +35,7 @@ namespace WinFormsMVVM
             }
         }
 
-        public Command(Action action)
-        {
-            _action = action;
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public void Execute(object sender, object parameter)
         {
@@ -46,7 +48,5 @@ namespace WinFormsMVVM
             });
             t.Start();
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

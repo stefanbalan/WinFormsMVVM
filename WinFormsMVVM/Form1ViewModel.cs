@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using WinFormsMVVM.MVVM;
 
 namespace WinFormsMVVM
 {
@@ -9,7 +11,7 @@ namespace WinFormsMVVM
         private bool _finishedGettingItems;
         public bool FinishedGettingItems
         {
-            get { return _finishedGettingItems; }
+            get => _finishedGettingItems;
             set { _finishedGettingItems = value; RaisePropertyChanged(); }
         }
 

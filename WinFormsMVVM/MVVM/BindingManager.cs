@@ -7,10 +7,10 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace WinFormsMVVM
+namespace WinFormsMVVM.MVVM
 {
-
-    public class BindingManager<TViewModel> where TViewModel : ViewModelBase, new()
+    public class BindingManager<TViewModel> : IDisposable
+        where TViewModel : ViewModelBase, new()
     {
         private IList<ICommandBinder> Binders { get; }
         private IList<Command> Commands { get; } = new List<Command>();
@@ -26,24 +26,21 @@ namespace WinFormsMVVM
             ViewModel.PropertyChanged += ViewModelOnPropertyChanged;
 
             Binders = new List<ICommandBinder>
-                          {
-                              new ControlBinder(),
-                              //new MenuItemCommandBinder()
-                          };
+            {
+                new ControlBinder()
+            };
 
-            Application.Idle += UpdateCommandState;
+            Application.Idle += OnIdle;
         }
 
-        private void UpdateCommandState(object sender, EventArgs e)
+        private void OnIdle(object sender, EventArgs e)
         {
             // ReSharper disable once UnusedVariable
             foreach (var command in Commands)
             {
-                //command.Enabled();
+                //command.Enabled = ...
             }
         }
-
-
 
         protected ICommandBinder FindBinder(IComponent component)
         {
@@ -64,13 +61,9 @@ namespace WinFormsMVVM
             return binder;
         }
 
-        protected void Dispose(bool disposing)
-        {
-            if (disposing)
-                Application.Idle -= UpdateCommandState;
-        }
 
         #region command binding
+
         public BindingManager<TViewModel> Bind(Command command, IComponent component)
         {
             if (!Commands.Contains(command))
@@ -80,10 +73,10 @@ namespace WinFormsMVVM
             return this;
         }
 
-        public BindingManager<TViewModel> Bind(Expression<Func<TViewModel, Command>> commandExpr, IComponent destComp)
+        public BindingManager<TViewModel> Bind(Expression<Func<TViewModel, Command>> commandExpr,
+            IComponent targetComponent)
         {
-            var member = commandExpr.Body as MemberExpression;
-            if (member == null)
+            if (!(commandExpr.Body is MemberExpression member))
                 throw new ArgumentException($"Expression '{commandExpr.Name}' refers to a method, not a property.");
 
             var fieldInfo = member.Member as FieldInfo;
@@ -91,28 +84,26 @@ namespace WinFormsMVVM
                 throw new ArgumentException($"Expression '{commandExpr.Name}' does not refer to a field.");
 
             if (fieldInfo.ReflectedType == null ||
-                typeof(TViewModel) != fieldInfo.ReflectedType && !typeof(TViewModel).IsSubclassOf(fieldInfo.ReflectedType))
-                throw new ArgumentException($"Expresion '{commandExpr}' refers to a property that is not from type {typeof(TViewModel).Name}.");
+                typeof(TViewModel) != fieldInfo.ReflectedType &&
+                !typeof(TViewModel).IsSubclassOf(fieldInfo.ReflectedType))
+                throw new ArgumentException(
+                    $"Expresion '{commandExpr}' refers to a property that is not from type {typeof(TViewModel).Name}.");
 
             var sourceGetter = commandExpr.Compile();
 
             var command = sourceGetter.Invoke(ViewModel);
-            if (command != null)
-            {
-                // Commands.Add(); // todo keep command bindings so i can unbind
-                Bind(command, destComp);
-            }
+            if (command != null) Bind(command, targetComponent);
 
             return this;
         }
+
         #endregion
 
         #region property binding
 
         public BindingManager<TViewModel> Bind<T>(Expression<Func<TViewModel, T>> sourceExpr, Action<T> setterDelegate)
         {
-            var member = sourceExpr.Body as MemberExpression;
-            if (member == null)
+            if (!(sourceExpr.Body is MemberExpression member))
                 throw new ArgumentException($"Expression '{sourceExpr.Name}' refers to a method, not a property.");
 
             var propInfo = member.Member as PropertyInfo;
@@ -120,16 +111,19 @@ namespace WinFormsMVVM
                 throw new ArgumentException($"Expression '{sourceExpr.Name}' refers to a field, not a property.");
 
             if (propInfo.ReflectedType == null ||
-                typeof(TViewModel) != propInfo.ReflectedType && !typeof(TViewModel).IsSubclassOf(propInfo.ReflectedType))
-                throw new ArgumentException($"Expresion '{sourceExpr}' refers to a property that is not from type {typeof(TViewModel).Name}.");
+                typeof(TViewModel) != propInfo.ReflectedType &&
+                !typeof(TViewModel).IsSubclassOf(propInfo.ReflectedType))
+                throw new ArgumentException(
+                    $"Expresion '{sourceExpr}' refers to a property that is not from type {typeof(TViewModel).Name}.");
 
             var sourceGetter = sourceExpr.Compile();
 
-            PropertyBindings.Add(propInfo.Name, new PropertyChangedHandler<TViewModel>(SynchronizationContext.Current, (vm) =>
-            {
-                var val = sourceGetter.Invoke(vm);
-                setterDelegate.Invoke(val);
-            }));
+            PropertyBindings.Add(propInfo.Name, new PropertyChangedHandler<TViewModel>(SynchronizationContext.Current,
+                vm =>
+                {
+                    var val = sourceGetter.Invoke(vm);
+                    setterDelegate.Invoke(val);
+                }));
 
             return this;
         }
@@ -143,10 +137,20 @@ namespace WinFormsMVVM
             if (!PropertyBindings.ContainsKey(eventArgs.PropertyName)) return;
 
             var handler = PropertyBindings[eventArgs.PropertyName];
-            handler.Execute((TViewModel)sender);
+            handler.Execute((TViewModel) sender);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                Application.Idle -= OnIdle;
+        }
+
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
-
-
-
 }

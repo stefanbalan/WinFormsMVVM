@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
 
-namespace WinFormsMVVM
+namespace WinFormsMVVM.MVVM
 {
     public class PropertyChangedHandler<TViewModel>
         where TViewModel : ViewModelBase
     {
-        protected readonly SynchronizationContext SyncContext;
         protected readonly Action<TViewModel> HandlerAction;
+        protected readonly SynchronizationContext SyncContext;
 
         public PropertyChangedHandler(SynchronizationContext context, Action<TViewModel> action)
         {
@@ -19,6 +19,5 @@ namespace WinFormsMVVM
         {
             SyncContext.Post(state => HandlerAction(vm), null);
         }
-
     }
 }

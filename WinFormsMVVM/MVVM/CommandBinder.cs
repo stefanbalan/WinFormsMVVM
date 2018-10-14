@@ -2,9 +2,8 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace WinFormsMVVM
+namespace WinFormsMVVM.MVVM
 {
-
     public interface ICommandBinder
     {
         Type SourceType { get; }
@@ -17,7 +16,7 @@ namespace WinFormsMVVM
 
         public void Bind(Command command, object source)
         {
-            Bind(command, (T)source);
+            Bind(command, (T) source);
         }
 
         protected abstract void Bind(Command command, T source);
@@ -25,25 +24,26 @@ namespace WinFormsMVVM
 
     public class ControlBinder : CommandBinder<Control>
     {
-        protected override void Bind(Command command, Control source)
+        protected override void Bind(Command command, Control target)
         {
-            if (source.DataBindings["Enabled"] != null || source.DataBindings["Text"] != null) return;
+            if (target.DataBindings["Enabled"] != null || target.DataBindings["Text"] != null) return;
 
-            source.DataBindings.Add("Enabled", command, "Enabled");
-            source.DataBindings.Add("Text", command, "Name");
-            source.Click += command.Execute;
+            target.DataBindings.Add("Enabled", command, "Enabled");
+            target.DataBindings.Add("Text", command, "Name");
+            target.Click += command.Execute;
         }
     }
 
+    //useless, ToolStripItem is Icomponent, see above imlementation
     public class MenuItemCommandBinder : CommandBinder<ToolStripItem>
     {
-        protected override void Bind(Command command, ToolStripItem source)
+        protected override void Bind(Command command, ToolStripItem target)
         {
-            source.Text = command.Name;
-            source.Enabled = command.Enabled;
-            source.Click += command.Execute;
+            target.Text = command.Name;
+            target.Enabled = command.Enabled;
+            target.Click += command.Execute;
 
-            command.PropertyChanged += (o, e) => source.Enabled = command.Enabled;
+            command.PropertyChanged += (o, e) => target.Enabled = command.Enabled;
         }
     }
 }
